@@ -41,18 +41,5 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function Location()
-    {
-        return $this->hasOne(Location::class, 'user_id');
-    }
-
-    public function cart()
-    {
-        return $this->hasOne(Cart::class);
-    }
-
-    public function brands()
-    {
-        return $this->hasMany(Brand::class);
-    }
+   
 }
