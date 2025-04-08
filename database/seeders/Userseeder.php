@@ -13,11 +13,6 @@ class Userseeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->hasBrands(5)->create([
-            'name' => 'admin',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('12345678'),
-            'role' => 'admin',
-        ]);
+        
     }
 }
