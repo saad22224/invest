@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('role')->default('user');
             $table->string('phone');
             $table->integer('balance')->default(0);
+            $table->string('verification_code')->nullable();
+            $table->boolean('is_verified')->default(false);
+    
             $table->rememberToken();
             $table->timestamps();
         });

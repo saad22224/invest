@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use App\models\User;
 use App\User as AppUser;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use App\Mail\VerificationCodeMail;
 
 class AuthController extends Controller
 {
@@ -18,7 +21,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login' , 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register'  , 'verifyCode']]);
     }
 
     /**
@@ -27,9 +30,11 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
+
+
     public function register(Request $request)
     {
-        // التحقق من صحة البيانات المدخلة
+        // التحقق من صحة البيانات
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -41,18 +46,58 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        // إنشاء مستخدم جديد
+        // توليد كود التحقق
+        $verificationCode = Str::random(6); // مثال: "a8B3fK"
+
+        // إنشاء المستخدم بدون تسجيل الدخول
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'phone' => $request->phone,
+            'verification_code' => $verificationCode,
+            'is_verified' => false,
         ]);
 
-        $credentials = $request->only('email', 'password');
-        $token = Auth::attempt($credentials);
+  
+        Mail::to($request->email)->send(new VerificationCodeMail($verificationCode));
+
+
+        return response()->json([
+            'message' => 'تم إرسال كود التحقق إلى بريدك الإلكتروني.',
+        ]);
+    }
+
+
+    public function verifyCode(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'code' => 'required|string',
+        ]);
+
+        $user = User::where('email', $request->email)
+            ->where('verification_code', $request->code)
+            ->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'الكود غير صحيح أو البريد غير موجود.'], 400);
+        }
+
+        $user->is_verified = true;
+        $user->verification_code = null;
+        $user->save();
+
+        // تسجيل الدخول بعد التحقق
+        $token = Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password, // لازم ترسله من الواجهة
+        ]);
+
         return $this->respondWithToken($token);
     }
+
+
 
     /**
      * Get a JWT token via given credentials.
