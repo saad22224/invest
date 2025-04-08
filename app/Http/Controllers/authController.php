@@ -49,7 +49,8 @@ class AuthController extends Controller
             'phone' => $request->phone,
         ]);
 
-        $token = Auth::login($user);
+        $credentials = $request->only('email', 'password');
+        $token = Auth::attempt($credentials);
         return $this->respondWithToken($token);
     }
 
