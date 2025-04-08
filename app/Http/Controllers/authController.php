@@ -75,28 +75,27 @@ class AuthController extends Controller
             'email' => 'required|email',
             'code' => 'required|string',
         ]);
-
+    
+        // البحث عن المستخدم بناءً على البريد والكود
         $user = User::where('email', $request->email)
             ->where('verification_code', $request->code)
             ->first();
-
+    
         if (!$user) {
             return response()->json(['error' => 'الكود غير صحيح أو البريد غير موجود.'], 400);
         }
-
+    
+        // إذا تم التحقق من الكود، قم بتحديث حالة المستخدم
         $user->is_verified = true;
         $user->verification_code = null;
         $user->save();
-
-        // تسجيل الدخول بعد التحقق
-        $token = Auth::attempt([
-            'email' => $request->email,
-            'password' => $request->password, // لازم ترسله من الواجهة
-        ]);
-
+    
+        // تسجيل الدخول مباشرة بعد التحقق من الكود
+        $token = Auth::login($user);  // استخدام Auth::login بدلاً من Auth::attempt
+    
         return $this->respondWithToken($token);
     }
-
+    
 
 
     /**
