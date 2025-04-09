@@ -43,5 +43,22 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class, 'plan_id');
+    }
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
    
+    public function withdrawals()
+    {
+        return $this->hasMany(Withdrawal::class);
+    }
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class);
+    }
 }

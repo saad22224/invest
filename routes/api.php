@@ -4,6 +4,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PlanController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,5 +34,24 @@ Route::group([
 
 });
 
+
+
+// الاشتراك في خطة
+Route::post('/subscribe', [PlanController::class, 'subscribeToPlan']);
+
+// التحقق من انتهاء الخطة وتحديث الرصيد
+Route::get('/check-plan-expiry', [PlanController::class, 'checkPlanExpiry'])->middleware('auth:sanctum');
+
+// جلب كل الخطط
+Route::get('/plans', [PlanController::class, 'getplans']);
+
+// سحب مبلغ من الرصيد
+Route::post('/withdraw', [PlanController::class, 'withdraw']);
+
+// آخر المعاملات (سحب، إيداع، اشتراكات)
+Route::get('/last-transactions', [PlanController::class, 'lastWithdrawals'])->middleware('auth:sanctum');
+
+// نتيجة خطة المستخدم
+Route::get('/plan-result', [PlanController::class, 'planresult'])->middleware('auth:sanctum');
 
 
