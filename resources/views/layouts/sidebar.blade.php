@@ -27,7 +27,7 @@
         <img src="{{ asset('admin/assets/Group 1000008235.png') }}" alt="User Management">
         <p class="mb-4">User Management</p>
     </a>
-    <a href="{{ asset('admin/subscriptionplan.html') }}" target="_self">
+    <a href="{{ route('plans.index') }}" target="_self">
         <img src="{{ asset('admin/assets/Vector (2).png') }}" alt="Subscriptions">
         <p class="mb-4">Subscriptions</p>
     </a>

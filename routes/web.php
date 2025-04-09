@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\PlanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\UserController;
@@ -35,3 +36,9 @@ Route::resource('users', UserController::class)
 
 Route::post('users/{id}/addmoney', [UserController::class, 'addmoney'])
 ->middleware('admin')->name('users.addmoney');
+
+
+// plans
+
+Route::resource('plans', PlanController::class)
+->middleware('admin');

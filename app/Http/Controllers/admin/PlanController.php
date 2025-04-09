@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PlanController extends Controller
@@ -12,7 +14,11 @@ class PlanController extends Controller
      */
     public function index()
     {
-        //
+        // Fetch all plans from the database
+        $plans = \App\Models\Plan::all();
+
+        // Return the view with the plans data
+        return view('dashboard.plans', compact('plans'));
     }
 
     /**
@@ -20,7 +26,7 @@ class PlanController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.createplan');
     }
 
     /**
@@ -28,7 +34,23 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'required|string',
+            'duration_days' => 'required|integer',
+            'profit_margin' => 'required|numeric',
+        ]);
+
+        Plan::create([
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+            'duration_days' => $request->duration_days,
+            'profit_margin' => $request->profit_margin,
+        ]);
+        return redirect()->route('plans.index')->with('success', 'Plan created successfully.');
     }
 
     /**
@@ -44,7 +66,9 @@ class PlanController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('dashboard.editplan', [
+            'plan' => Plan::findOrFail($id),
+        ]);
     }
 
     /**
@@ -52,7 +76,22 @@ class PlanController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'description' => 'required|string',
+            'duration_days' => 'required|integer',
+            'profit_margin' => 'required|numeric',
+        ]);
+        $plan = Plan::findOrFail($id);
+        $plan->update([
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+            'duration_days' => $request->duration_days,
+            'profit_margin' => $request->profit_margin,
+        ]);
+        return redirect()->route('plans.index')->with('success', 'Plan updated successfully.');
     }
 
     /**
@@ -60,6 +99,8 @@ class PlanController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $plan = Plan::findOrFail($id);
+        $plan->delete();
+        return redirect()->route('plans.index')->with('success', 'Plan deleted successfully.');
     }
 }
