@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         // الكود الخاص بعرض قائمة المستخدمين
         $users = User::all();
-        // return view('admin.users.index', compact('users'));
+        return view('dashboard.users', compact('users'));
     }
 
     /**
@@ -46,7 +46,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        return view('dashboard.edituser', ['user' => User::find($id)]);
     }
 
     /**
@@ -62,6 +63,33 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        if ($user) {
+            $user->delete();
+            return redirect()->route('users.index')->with('success', 'تم حذف المستخدم بنجاح');
+        } else {
+            return redirect()->back()->with('error', 'المستخدم غير موجود');
+        }
+
+        // dd($user);
+    }
+
+
+    public function addmoney(Request $request , $id)
+    {
+        $user = User::find($id);
+        if ($user) {
+            $user->balance += $request->amount;
+            $user->deposits()->create([
+                'amount' => $request->amount,
+                'user_id' => $user->id,
+            ]);
+            $user->save();
+            return redirect()->route('users.index')->with('success', 'تم إضافة المبلغ بنجاح');
+        } else {
+            return redirect()->back()->with('error', 'المستخدم غير موجود');
+        }
+
+        dd($request->all());
     }
 }

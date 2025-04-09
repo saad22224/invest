@@ -23,7 +23,7 @@
         <img src="{{ asset('admin/assets/Group 1000007883.png') }}" alt="Dashboard">
         <p class="mb-4">Dashboard</p>
     </a>
-    <a href="{{ asset('admin/mangment.html') }}">
+    <a href="{{ route('users.index') }}">
         <img src="{{ asset('admin/assets/Group 1000008235.png') }}" alt="User Management">
         <p class="mb-4">User Management</p>
     </a>

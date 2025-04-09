@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminLoginController;
+use App\Http\Controllers\admin\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,3 +28,10 @@ Route::post('etharadmin/logout' , [AdminLoginController::class , 'logout'])->nam
 Route::get('etharadmin/dashboard', function () {
     return view('dashboard.index');
 })->name('admin.dashboard')->middleware('admin');
+
+
+Route::resource('users', UserController::class)
+->middleware('admin');
+
+Route::post('users/{id}/addmoney', [UserController::class, 'addmoney'])
+->middleware('admin')->name('users.addmoney');
