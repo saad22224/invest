@@ -43,8 +43,11 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json([
+                'error' => $validator->errors()->all(), // كل الرسائل في Array
+            ], 422);
         }
+        
 
         // توليد كود التحقق
         $verificationCode = Str::random(6); // مثال: "a8B3fK"
@@ -134,8 +137,11 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json([
+                'error' => $validator->errors()->all(), // كل الرسائل في Array
+            ], 422);
         }
+        
         $credentials = $request->only('email', 'password');
 
         if ($token = Auth::attempt($credentials)) {
