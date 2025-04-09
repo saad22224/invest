@@ -40,7 +40,7 @@ Route::group([
 Route::post('/subscribe', [PlanController::class, 'subscribeToPlan']);
 
 // التحقق من انتهاء الخطة وتحديث الرصيد
-Route::get('/check-plan-expiry', [PlanController::class, 'checkPlanExpiry'])->middleware('auth:sanctum');
+Route::get('/check-plan-expiry', [PlanController::class, 'checkPlanExpiry']);
 
 // جلب كل الخطط
 Route::get('/plans', [PlanController::class, 'getplans']);
@@ -49,9 +49,9 @@ Route::get('/plans', [PlanController::class, 'getplans']);
 Route::post('/withdraw', [PlanController::class, 'withdraw']);
 
 // آخر المعاملات (سحب، إيداع، اشتراكات)
-Route::get('/last-transactions', [PlanController::class, 'lastWithdrawals'])->middleware('auth:sanctum');
+Route::get('/last-transactions', [PlanController::class, 'lastWithdrawals']);
 
 // نتيجة خطة المستخدم
-Route::get('/plan-result', [PlanController::class, 'planresult'])->middleware('auth:sanctum');
+Route::get('/plan-result', [PlanController::class, 'planresult']);
 
 

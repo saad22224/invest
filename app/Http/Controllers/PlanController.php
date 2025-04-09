@@ -11,11 +11,10 @@ class PlanController extends Controller
     public function subscribeToPlan(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'plan_id' => 'required|exists:plans,id',
         ]);
         $plan = Plan::find($request->plan_id);
-        $user = User::find($request->user_id);
+        $user = auth()->user();
         if ($user->balance < $plan->price) {
             return response()->json(['message' => 'رصيدك غير كافي'], 422);
         }
@@ -24,7 +23,7 @@ class PlanController extends Controller
 
         $expiratoryDate = now()->addDays($plan->duration_days);
         $userPlan = Subscription::create([
-            'user_id' => $request->user_id,
+            'user_id' => auth()->user()->id,
             'plan_id' => $request->plan_id,
             'expiratory_date' => $expiratoryDate,
         ]);
@@ -41,8 +40,8 @@ class PlanController extends Controller
     {
         $user = auth()->user();
         $userPlans = Subscription::where('user_id', $user->id)->get();
-        $plan = $userPlans->plan;
         foreach ($userPlans as $userPlan) {
+            $plan = $userPlan->plan;
             if ($userPlan->expiratory_date < now()) {
                 $user->balance += $plan->price + ($plan->price * $plan->profit_margin / 100);
                 $user->save();
@@ -69,10 +68,9 @@ class PlanController extends Controller
     public function withdraw(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'amount' => 'required|numeric|min:0',
         ]);
-        $user = User::find($request->user_id);
+        $user = auth()->user();
         if ($user->balance < $request->amount) {
             return response()->json(['message' => 'رصيدك غير كافي'], 422);
         }
@@ -80,7 +78,7 @@ class PlanController extends Controller
         $user->save();
 
         $user->withdrawals()->create([
-            'user_id' => $request->user_id,
+            'user_id' => auth()->user()->id,
             'amount' => $request->amount,
         ]);
 
@@ -108,8 +106,8 @@ class PlanController extends Controller
     {
         $user = auth()->user();
         $userPlans = Subscription::where('user_id', $user->id)->get();
-        $plan = $userPlans->plan;
         foreach ($userPlans as $userPlan) {
+            $plan = $userPlan->plan;
             if ($userPlan->expiratory_date < now()) {
                 return response()->json([
                     'message' => 'Plan expired',
