@@ -46,6 +46,7 @@ class PlanController extends Controller
             $plan = $userPlan->plan;
             if ($userPlan->expiratory_date < now()) {
                 $user->balance += $plan->price + ($plan->price * $plan->profit_margin / 100);
+                $user->profit += $plan->price * $plan->profit_margin / 100;
                 $user->save();
                 $userPlan->delete();
             }
@@ -143,6 +144,21 @@ class PlanController extends Controller
         return response()->json([
             'message' => 'Offers retrieved successfully',
             'offers' => $offers,
+        ]);
+    }
+
+
+    public function getuserprofit() {
+        $user = auth()->user();
+        $profit = $user->profit;
+        if ($profit == 0) {
+            return response()->json([
+                'message' => 'No profit found',
+            ]);
+        }
+        return response()->json([
+            'message' => 'Profit retrieved successfully',
+            'profit' => $profit,
         ]);
     }
     
