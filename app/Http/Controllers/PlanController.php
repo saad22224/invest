@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Offer;
 use App\Models\Plan;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ class PlanController extends Controller
         $user->save();
 
         $expiratoryDate = now()->addDays($plan->duration_days);
+        // $expiratoryDate = now()->addMinutes(2); test
         $userPlan = Subscription::create([
             'user_id' => auth()->user()->id,
             'plan_id' => $request->plan_id,
@@ -106,6 +108,14 @@ class PlanController extends Controller
     {
         $user = auth()->user();
         $userPlans = Subscription::where('user_id', $user->id)->get();
+    
+        if ($userPlans->isEmpty()) {
+            return response()->json([
+                'message' => 'No active plan found',
+                'profit' => 0,
+            ]);
+        }
+    
         foreach ($userPlans as $userPlan) {
             $plan = $userPlan->plan;
             if ($userPlan->expiratory_date < now()) {
@@ -115,9 +125,25 @@ class PlanController extends Controller
                 ]);
             }
         }
+    
         return response()->json([
             'message' => 'Plan is still active',
             'profit' => 0,
         ]);
     }
+
+
+    public function getoffers() {
+        $offers = Offer::all();
+        if ($offers->isEmpty()) {
+            return response()->json([
+                'message' => 'No offers found',
+            ]);
+        }
+        return response()->json([
+            'message' => 'Offers retrieved successfully',
+            'offers' => $offers,
+        ]);
+    }
+    
 }

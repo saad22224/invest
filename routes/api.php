@@ -40,7 +40,7 @@ Route::group([
 Route::post('/subscribe', [PlanController::class, 'subscribeToPlan']);
 
 // التحقق من انتهاء الخطة وتحديث الرصيد
-Route::get('/check-plan-expiry', [PlanController::class, 'checkPlanExpiry']);
+Route::post('/check-plan-expiry', [PlanController::class, 'checkPlanExpiry']);
 
 // جلب كل الخطط
 Route::get('/plans', [PlanController::class, 'getplans']);
@@ -53,5 +53,8 @@ Route::get('/last-transactions', [PlanController::class, 'lastWithdrawals']);
 
 // نتيجة خطة المستخدم
 Route::get('/plan-result', [PlanController::class, 'planresult']);
+
+
+Route::get('/getoffers', [PlanController::class, 'getoffers']);
 
 
