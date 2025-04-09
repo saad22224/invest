@@ -1,3 +1,23 @@
+
+
+<style>
+    .logout-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #e3342f;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+    }
+
+    .logout-btn:hover {
+        background-color: #cc1f1a;
+    }
+</style>
+
 <nav class="col-md-1 d-none d-md-block sidebar shadow text-center position-relative pt-2">
     <a href="{{ asset('admin/index.html') }}" class="active">
         <img src="{{ asset('admin/assets/Group 1000007883.png') }}" alt="Dashboard">
@@ -27,4 +47,14 @@
         <img src="{{ asset('admin/assets/Group 1000008238.png') }}" alt="API">
         <p class="mb-4">API</p>
     </a>
+    
+    
+    <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
+        @csrf
+        <button type="submit" class="logout-btn">
+            Logout
+        </button>
+    </form>
+    
+    
 </nav>

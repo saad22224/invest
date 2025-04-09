@@ -16,16 +16,20 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // استخدام الحارس الافتراضي أو حارس مخصص
-        if (!Auth::guard('web')->check()) {
-            return redirect('/etharadmin')->with('error', 'You must be logged in to access this page.');
+        if (!Auth::guard('admin')->check()) {
+            return redirect('/etharadmin')->with('error', 'You must be logged in as an admin to access this page.');
         }
 
-        // التحقق مما إذا كان المستخدم الحالي ليس Admin
-        if (Auth::guard('web')->user()->role !== 'admin') {
+        // الحصول على المستخدم من guard الخاص بالأدمن
+        $user = Auth::guard('admin')->user();
+
+        // التحقق مما إذا كان هذا المستخدم موجود في جدول الـ admins
+        if (!\App\Models\Admin::find($user->id)) {  // يمكن هنا فحصه إذا كان موجودًا في جدول الـ admins
             return redirect('/etharadmin')->with('error', 'You are not authorized to access this page.');
         }
 
+        // إذا كان كل شيء صحيح، يمكن متابعة الطلب
         return $next($request);
     }
 }
+

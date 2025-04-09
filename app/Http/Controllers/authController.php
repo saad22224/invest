@@ -89,9 +89,8 @@ class AuthController extends Controller
         $user->is_verified = true;
         $user->verification_code = null;
         $user->save();
-    
-        // تسجيل الدخول مباشرة بعد التحقق من الكود
-        $token = Auth::login($user);  // استخدام Auth::login بدلاً من Auth::attempt
+
+        $token = Auth::login($user);  
     
         return $this->respondWithToken($token);
     }
