@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register'  , 'verifyCode']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verifyCode', 'resendVerificationCode']]);
     }
 
     /**
@@ -59,7 +59,7 @@ class AuthController extends Controller
             'is_verified' => false,
         ]);
 
-  
+
         Mail::to($request->email)->send(new VerificationCodeMail($verificationCode));
 
 
@@ -75,27 +75,50 @@ class AuthController extends Controller
             'email' => 'required|email',
             'code' => 'required|string',
         ]);
-    
+
         // البحث عن المستخدم بناءً على البريد والكود
         $user = User::where('email', $request->email)
             ->where('verification_code', $request->code)
             ->first();
-    
+
         if (!$user) {
             return response()->json(['error' => 'الكود غير صحيح أو البريد غير موجود.'], 400);
         }
-    
+
         // إذا تم التحقق من الكود، قم بتحديث حالة المستخدم
         $user->is_verified = true;
         $user->verification_code = null;
         $user->save();
 
-        $token = Auth::login($user);  
-    
+        $token = Auth::login($user);
+
         return $this->respondWithToken($token);
     }
-    
 
+    public function resendVerificationCode(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        // البحث عن المستخدم بناءً على البريد
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'البريد غير موجود.'], 400);
+        }
+
+        // توليد كود التحقق جديد
+        $verificationCode = Str::random(6); // مثال: "a8B3fK"
+        $user->verification_code = $verificationCode;
+        $user->save();
+
+        Mail::to($request->email)->send(new VerificationCodeMail($verificationCode));
+
+        return response()->json([
+            'message' => 'تم إرسال كود التحقق إلى بريدك الإلكتروني.',
+        ]);
+    }
 
     /**
      * Get a JWT token via given credentials.
