@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Offer;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Models\Withdrawal;
 use Illuminate\Http\Request;
 use App\models\User;
 class PlanController extends Controller
@@ -77,12 +78,24 @@ class PlanController extends Controller
         if ($user->balance < $request->amount) {
             return response()->json(['message' => 'رصيدك غير كافي'], 422);
         }
+        // $withdraw = Withdrawal::create([
+        //     'user_id' => auth()->user()->id,
+        //     'amount' => $request->amount,
+        //     'usdt' => $request->usdt,
+        //     'bank' => $request->bank,
+        //     'western' => $request->western,
+        //     'monney_office' => $request->monney_office,
+        // ]);
         $user->balance -= $request->amount;
         $user->save();
 
         $user->withdrawals()->create([
             'user_id' => auth()->user()->id,
             'amount' => $request->amount,
+            'usdt' => $request->usdt,
+            'bank' => $request->bank,
+            'western' => $request->western,
+            'monney_office' => $request->monney_office,
         ]);
 
         return response()->json([
@@ -109,14 +122,14 @@ class PlanController extends Controller
     {
         $user = auth()->user();
         $userPlans = Subscription::where('user_id', $user->id)->get();
-    
+
         if ($userPlans->isEmpty()) {
             return response()->json([
                 'message' => 'No active plan found',
                 'profit' => 0,
             ]);
         }
-    
+
         foreach ($userPlans as $userPlan) {
             $plan = $userPlan->plan;
             if ($userPlan->expiratory_date < now()) {
@@ -126,7 +139,7 @@ class PlanController extends Controller
                 ]);
             }
         }
-    
+
         return response()->json([
             'message' => 'Plan is still active',
             'profit' => 0,
@@ -134,7 +147,8 @@ class PlanController extends Controller
     }
 
 
-    public function getoffers() {
+    public function getoffers()
+    {
         $offers = Offer::all();
         if ($offers->isEmpty()) {
             return response()->json([
@@ -148,7 +162,8 @@ class PlanController extends Controller
     }
 
 
-    public function getuserprofit() {
+    public function getuserprofit()
+    {
         $user = auth()->user();
         $profit = $user->profit;
         if ($profit == 0) {
@@ -161,5 +176,5 @@ class PlanController extends Controller
             'profit' => $profit,
         ]);
     }
-    
+
 }

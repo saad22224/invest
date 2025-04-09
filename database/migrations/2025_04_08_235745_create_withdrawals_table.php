@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
+            $table->string('usdt')->nullable();
+            $table->string('bank')->nullable();
+            $table->string('western')->nullable();
+            $table->string('monney_office')->nullable();
             $table->timestamps();
         });
     }
