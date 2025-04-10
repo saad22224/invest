@@ -43,23 +43,49 @@ class PlanController extends Controller
     public function checkPlanExpiry()
     {
         $user = auth()->user();
-        $userPlans = Subscription::where('user_id', $user->id)->get();
+        $userPlans = Subscription::where('user_id', $user->id)
+        ->with('plan')->get();
+    
+        $results = [];
+    
         foreach ($userPlans as $userPlan) {
             $plan = $userPlan->plan;
-            if ($userPlan->expiratory_date < now()) {
-                $user->balance += $plan->price + ($plan->price * $plan->profit_margin / 100);
-                $user->profit += $plan->price * $plan->profit_margin / 100;
+            $isExpired = $userPlan->expiratory_date < now();
+    
+            if ($isExpired) {
+                $profit = $plan->price * $plan->profit_margin / 100;
+                $totalReturn = $plan->price + $profit;
+    
+                $user->balance += $totalReturn;
+                $user->profit += $profit;
                 $user->save();
-                $userPlan->delete();
+    
+                $userPlan->delete(); // حذف الاشتراك المنتهي
+    
+                $results[] = [
+                    'plan' => $plan,
+                    'status' => 'expired',
+                    'profit' => $profit,
+                    'total_return' => $totalReturn,
+                ];
+            } else {
+                $results[] = [
+                    'plan' => $plan,
+                    'status' => 'active',
+                    'profit' => 0,
+                    'expiry_date' => $userPlan->expiratory_date,
+                ];
             }
         }
-
+    
         return response()->json([
-            'message' => 'Plan expired and balance updated',
-            'user_plans' => $userPlans,
+            'message' => 'Plans processed successfully',
+            'plans' => $results,
+            'balance' => $user->balance,
+            'total_profit' => $user->profit,
         ]);
     }
-
+    
 
     public function getplans()
     {
@@ -119,34 +145,35 @@ class PlanController extends Controller
         ]);
     }
 
-    public function planresult()
+    public function planresult(Request $request)
     {
         $user = auth()->user();
-        $userPlans = Subscription::where('user_id', $user->id)->get();
-
-        if ($userPlans->isEmpty()) {
+    
+        // نحاول نجيب الاشتراك الخاص باليوزر والخطة اللي بعتها
+        $userPlan = Subscription::where('user_id', $user->id)
+            ->where('plan_id', $request->plan_id)
+            ->with('plan')
+            ->first();
+    
+        if (!$userPlan) {
             return response()->json([
-                'message' => 'No active plan found',
+                'message' => 'User is not subscribed to this plan',
                 'profit' => 0,
             ]);
         }
-
-        foreach ($userPlans as $userPlan) {
-            $plan = $userPlan->plan;
-            if ($userPlan->expiratory_date < now()) {
-                return response()->json([
-                    'message' => 'Plan expired',
-                    'profit' => $plan->price * $plan->profit_margin / 100,
-                ]);
-            }
-        }
-
+    
+        $plan = $userPlan->plan;
+        $isExpired = $userPlan->expiratory_date < now();
+    
         return response()->json([
-            'message' => 'Plan is still active',
-            'profit' => 0,
+            'message' => $isExpired ? 'Plan expired' : 'Plan is still active',
+            'status' => $isExpired ? 'expired' : 'active',
+            'profit' => $isExpired ? ($plan->price * $plan->profit_margin / 100) : 0,
+            'plan' => $plan,
+            'expiry_date' => $userPlan->expiratory_date,
         ]);
     }
-
+    
 
     public function getoffers()
     {
