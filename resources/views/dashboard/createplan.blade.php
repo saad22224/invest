@@ -21,7 +21,8 @@
                 <!-- Header -->
                 <div class="d-flex justify-content-between overflow-hidden  border-bottom  nav-create py-1">
                     <div class="d-md-flex d-none mb-5 align-self-center create ms-2 position-absolute ">
-                        <img src="{{ asset('admin/assets/Group 1000007853.png') }}" class="ms-md-3 mb-md-1" alt="logo">
+                        <img src="{{ asset('admin/assets/Group 1000007853.png') }}" class="ms-md-3 mb-md-1"
+                            alt="logo">
                         <h4 class="text-center mt-md-1 me-5 me-md-5 ms-md-2 ">Add Money to User</h4>
                     </div>
                 </div>
@@ -38,39 +39,50 @@
                             <div class="info_security pb-2">
                                 <h4>Create New Plan</h4>
                             </div>
-                    
+
                             <div class="input_group">
-                    
+
                                 <!-- Plan Name -->
                                 <div class="d-flex my-4 align-items-center">
                                     <p class="mt-2 me-5 w-25">Plan Name*</p>
                                     <input type="text" name="name" class="form-control w-50 mx-auto" required>
                                 </div>
-                    
+
                                 <!-- Description -->
                                 <div class="d-flex my-4 align-items-center">
                                     <p class="mt-2 me-5 w-25">Description*</p>
                                     <textarea name="description" class="form-control w-50 mx-auto" rows="2" required></textarea>
                                 </div>
-                    
+
                                 <!-- Profit Margin -->
                                 <div class="d-flex my-4 align-items-center">
                                     <p class="mt-2 me-5 w-25">Profit Margin (%)*</p>
-                                    <input type="number" step="0.01" name="profit_margin" class="form-control w-50 mx-auto" required>
+                                    <input type="number" step="0.01" name="profit_margin"
+                                        class="form-control w-50 mx-auto" required>
                                 </div>
-                    
+
                                 <!-- Duration Days -->
                                 <div class="d-flex my-4 align-items-center">
                                     <p class="mt-2 me-5 w-25">Duration (Days)*</p>
-                                    <input type="number" name="duration_days" class="form-control w-50 mx-auto" required>
+                                    <input type="number" name="duration_days" class="form-control w-50 mx-auto"
+                                        required>
                                 </div>
-                    
+
                                 <!-- Price -->
                                 <div class="d-flex my-4 align-items-center">
                                     <p class="mt-2 me-5 w-25">Price ($)*</p>
-                                    <input type="number" step="0.01" name="price" class="form-control w-50 mx-auto" required>
+                                    <input type="number" step="0.01" name="price"
+                                        class="form-control w-50 mx-auto" required>
                                 </div>
-                    
+                                <div class="d-flex my-4 align-items-center">
+                                    <p class="mt-2 me-5 w-25">Plan Type*</p>
+                                    <select name="special" class="form-select w-50 mx-auto" required>
+                                        <option value="0" >Normal</option>
+                                        <option value="1" >Special</option>
+                                    </select>
+                                </div>
+                                
+
                                 <!-- Submit -->
                                 <div class="d-flex mb-4">
                                     <button type="submit" class="button_Adduser">Create Plan</button>
@@ -78,7 +90,7 @@
                             </div>
                         </div>
                     </form>
-                    
+
                 </div>
             </main>
         </div>

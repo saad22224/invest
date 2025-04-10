@@ -71,7 +71,14 @@
                                     <p class="mt-2 me-5 w-25">Price ($)*</p>
                                     <input type="number" step="0.01" name="price" class="form-control w-50 mx-auto" required value="{{ $plan->price }}">
                                 </div>
-
+                                <div class="d-flex my-4 align-items-center">
+                                    <p class="mt-2 me-5 w-25">Plan Type*</p>
+                                    <select name="special" class="form-select w-50 mx-auto" required>
+                                        <option value="0" {{ $plan->special == 0 ? 'selected' : '' }}>Normal</option>
+                                        <option value="1" {{ $plan->special == 1 ? 'selected' : '' }}>Special</option>
+                                    </select>
+                                </div>
+                                
                                 <!-- Submit -->
                                 <div class="d-flex mb-4">
                                     <button type="submit" class="button_Adduser">Update Plan</button>

@@ -14,6 +14,7 @@ class Plan extends Model
         'profit_margin',
         'duration_days',
         'price',
+        'special',
     ];
     public function subscriptions()
     {

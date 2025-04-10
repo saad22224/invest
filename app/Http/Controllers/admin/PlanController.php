@@ -49,6 +49,7 @@ class PlanController extends Controller
             'description' => $request->description,
             'duration_days' => $request->duration_days,
             'profit_margin' => $request->profit_margin,
+            'special' => $request->special,
         ]);
         return redirect()->route('plans.index')->with('success', 'Plan created successfully.');
     }
@@ -90,6 +91,7 @@ class PlanController extends Controller
             'description' => $request->description,
             'duration_days' => $request->duration_days,
             'profit_margin' => $request->profit_margin,
+            'special' => $request->special,
         ]);
         return redirect()->route('plans.index')->with('success', 'Plan updated successfully.');
     }

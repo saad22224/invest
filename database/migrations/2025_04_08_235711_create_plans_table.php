@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('profit_margin', 5, 2); // هامش الربح
             $table->integer('duration_days'); // المدة باليوم
             $table->decimal('price', 10, 2); // سعر الخطة
+            $table->integer('special')->default(0);
             $table->timestamps();
         });
     }

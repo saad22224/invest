@@ -19,6 +19,7 @@ class PlanSeeder extends Seeder
                 'profit_margin' => 5.00,
                 'duration_days' => 3,
                 'price' => 100.00,
+                'special' => 0,
             ],
             [
                 'name' => 'الاستثمار لمدة أسبوعين',
@@ -26,6 +27,7 @@ class PlanSeeder extends Seeder
                 'profit_margin' => 10.00,
                 'duration_days' => 14,
                 'price' => 250.00,
+                'special' => 0,
             ],
             [
                 'name' => 'الاستثمار لمدة 20 يوم',
@@ -33,6 +35,7 @@ class PlanSeeder extends Seeder
                 'profit_margin' => 15.00,
                 'duration_days' => 20,
                 'price' => 500.00,
+                'special' => 0,
             ],
             [
                 'name' => 'الاستثمار لمدة شهر',
@@ -40,6 +43,7 @@ class PlanSeeder extends Seeder
                 'profit_margin' => 25.00,
                 'duration_days' => 30,
                 'price' => 1000.00,
+                'special' => 0,
             ],
             [
                 'name' => 'عرض خاص لفترة محدودة',
@@ -47,6 +51,7 @@ class PlanSeeder extends Seeder
                 'profit_margin' => 30.00,
                 'duration_days' => 10,
                 'price' => 750.00,
+                'special' => 1,
             ],
         ];
 

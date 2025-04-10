@@ -62,7 +62,7 @@ class PlanController extends Controller
 
     public function getplans()
     {
-        $plans = Plan::all();
+        $plans = Plan::where('special', 0)->get();
         return response()->json([
             'message' => 'Plans retrieved successfully',
             'plans' => $plans,
@@ -149,7 +149,7 @@ class PlanController extends Controller
 
     public function getoffers()
     {
-        $offers = Offer::all();
+        $offers = plan::where('special', 1)->get();
         if ($offers->isEmpty()) {
             return response()->json([
                 'message' => 'No offers found',
