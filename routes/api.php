@@ -40,8 +40,10 @@ Route::group([
 // الاشتراك في خطة
 Route::post('/subscribe', [PlanController::class, 'subscribeToPlan']);
 
-// التحقق من انتهاء الخطة وتحديث الرصيد
-Route::post('/check-plan-expiry', [PlanController::class, 'checkPlanExpiry']);
+//  بيجلب كل الخطط
+Route::post('/users-plan', [PlanController::class, 'getuserplan']);
+// check plans
+Route::post('/checkplan', [PlanController::class, 'checkplan']);
 
 // جلب كل الخطط
 Route::get('/plans', [PlanController::class, 'getplans']);
