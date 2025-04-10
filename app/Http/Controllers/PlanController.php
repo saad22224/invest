@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Offer;
 use App\Models\Plan;
 use App\Models\Subscription;
@@ -174,6 +175,15 @@ class PlanController extends Controller
         return response()->json([
             'message' => 'Profit retrieved successfully',
             'profit' => $profit,
+        ]);
+    }
+
+
+    public function notifications(){
+        $notifcation = Notification::all();
+        return response()->json([
+            'message' => 'Notifications retrieved successfully',
+            'notifications' => $notifcation,
         ]);
     }
 

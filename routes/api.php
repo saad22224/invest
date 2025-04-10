@@ -59,3 +59,6 @@ Route::get('/plan-result', [PlanController::class, 'planresult']);
 Route::get('/getoffers', [PlanController::class, 'getoffers']);
 
 Route::get('/getuserprofit' , [PlanController::class, 'getuserprofit']);
+
+
+Route::get('/notifications' , [PlanController::class, 'notifications']);

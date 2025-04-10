@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Notification;
 
 class PlanController extends Controller
 {
@@ -15,7 +16,7 @@ class PlanController extends Controller
     public function index()
     {
         // Fetch all plans from the database
-        $plans = \App\Models\Plan::all();
+        $plans = Plan::all();
 
         // Return the view with the plans data
         return view('dashboard.plans', compact('plans'));
@@ -51,6 +52,12 @@ class PlanController extends Controller
             'profit_margin' => $request->profit_margin,
             'special' => $request->special,
         ]);
+
+        Notification::create([
+            'title' => 'New Plan Added',
+            'message' => 'A new plan named ' . $request->name . ' has been added.',
+        ]);
+    
         return redirect()->route('plans.index')->with('success', 'Plan created successfully.');
     }
 
