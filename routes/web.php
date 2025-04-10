@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\PlanController;
+use App\Http\Controllers\admin\WithdrawlController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\UserController;
@@ -26,9 +28,7 @@ Route::get('etharadmin', function () {
 Route::post('etharadmin/login' , [AdminLoginController::class , 'login'])->name('admin.login');
 Route::post('etharadmin/logout' , [AdminLoginController::class , 'logout'])->name('admin.logout');
 
-Route::get('etharadmin/dashboard', function () {
-    return view('dashboard.index');
-})->name('admin.dashboard')->middleware('admin');
+Route::get('etharadmin/dashboard', [DashboardController::class , 'index'])->name('admin.dashboard')->middleware('admin');
 
 
 Route::resource('users', UserController::class)
@@ -41,4 +41,12 @@ Route::post('users/{id}/addmoney', [UserController::class, 'addmoney'])
 // plans
 
 Route::resource('plans', PlanController::class)
+->middleware('admin');
+
+
+
+
+// withdrawls
+
+Route::resource('withdrawls', WithdrawlController::class)
 ->middleware('admin');

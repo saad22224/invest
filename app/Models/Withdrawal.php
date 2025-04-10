@@ -11,5 +11,14 @@ class Withdrawal extends Model
     protected $fillable = [
         'user_id',
         'amount',
+        'usdt',
+        'bank',
+        'western',
+        'money_office',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

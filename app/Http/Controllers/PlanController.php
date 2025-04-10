@@ -95,7 +95,7 @@ class PlanController extends Controller
             'usdt' => $request->usdt,
             'bank' => $request->bank,
             'western' => $request->western,
-            'monney_office' => $request->monney_office,
+            'money_office' => $request->money_office,
         ]);
 
         return response()->json([

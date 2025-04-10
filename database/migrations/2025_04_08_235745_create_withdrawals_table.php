@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('usdt')->nullable();
             $table->string('bank')->nullable();
             $table->string('western')->nullable();
-            $table->string('monney_office')->nullable();
+            $table->string('money_office')->nullable();
             $table->timestamps();
         });
     }
