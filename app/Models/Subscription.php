@@ -12,6 +12,7 @@ class Subscription extends Model
         'user_id',
         'plan_id',
      'expiratory_date',
+        'start_date',
     ];
     public function user()
     {

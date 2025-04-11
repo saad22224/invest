@@ -8,7 +8,7 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Withdrawal;
 use Illuminate\Http\Request;
-use App\models\User;
+use App\Models\User;
 class PlanController extends Controller
 {
     public function subscribeToPlan(Request $request)
@@ -16,6 +16,7 @@ class PlanController extends Controller
         $request->validate([
             'plan_id' => 'required|exists:plans,id',
         ]);
+        $startDate = now();
         $plan = Plan::find($request->plan_id);
         $user = auth()->user();
         if ($user->balance < $plan->price) {
@@ -30,6 +31,7 @@ class PlanController extends Controller
             'user_id' => auth()->user()->id,
             'plan_id' => $request->plan_id,
             'expiratory_date' => $expiratoryDate,
+            'start_date' => $startDate,
         ]);
 
 
@@ -74,6 +76,7 @@ class PlanController extends Controller
                     'status' => 'active',
                     'profit' => 0,
                     'expiry_date' => $userPlan->expiratory_date,
+                    'start_date' => $userPlan->start_date,
                 ];
             }
         }
