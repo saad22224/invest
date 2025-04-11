@@ -52,15 +52,15 @@ Route::get('/plans', [PlanController::class, 'getplans']);
 Route::post('/withdraw', [PlanController::class, 'withdraw']);
 
 // آخر المعاملات (سحب، إيداع، اشتراكات)
-Route::get('/last-transactions', [PlanController::class, 'lastWithdrawals']);
+Route::post('/last-transactions', [PlanController::class, 'lastWithdrawals']);
 
 // نتيجة خطة المستخدم
-Route::get('/plan-result', [PlanController::class, 'planresult']);
+Route::post('/plan-result', [PlanController::class, 'planresult']);
 
 
 Route::get('/getoffers', [PlanController::class, 'getoffers']);
 
-Route::get('/getuserprofit' , [PlanController::class, 'getuserprofit']);
+Route::post('/getuserprofit' , [PlanController::class, 'getuserprofit']);
 
 
 Route::get('/notifications' , [PlanController::class, 'notifications']);
