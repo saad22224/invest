@@ -29,11 +29,7 @@
     @media (max-width: 767px) {
         .sidebar-toggle-btn {
             display: block;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: #e3342f;
-            color: #fff;
+          
             border: none;
             padding: 10px 20px;
             font-size: 20px;
