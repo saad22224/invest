@@ -61,4 +61,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Deposit::class);
     }
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            $user->user_identifier = rand(10000, 99999); // توليد رقم عشوائي مكون من 5 أرقام
+        });
+    }
 }
